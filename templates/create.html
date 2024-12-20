@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        *{
+            background-color:blueviolet;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 2.5% 2.5%;
+            /* box-shadow: #fff; */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            /* box-shadow: 0 0 30px rgba(0, 0, 0, 0.1); */
+            background-color: white;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            background-color: white;
+        }
+        form:hover{
+            color:seagreen;
+        }
+        
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: white;
+        }
+        
+        input[type="submit"] {
+            width: 100%;
+            height: 40px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+        
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+        h2{
+            background-color: white;
+        }
+    </style>
+</head>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<body>
+    <section>
+    <form id="registration-form" method="POST">
+        <h2>Registration Form</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required="name">
+        <div class="error" id="username-error"></div>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required="email">
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="cpassword">
+        
+        <a href="dashboard.html"><input type="submit" value="Register"></a>
+        
+    </form>
+</section>
+
+    <script>
+        const form = document.getElementById('registration-form');
+        const usernameInput = document.getElementById('username');
+        const usernameError = document.getElementById('username-error');
+
+        form.addEventListener('submit', (e) => {
+            if (usernameInput.value.trim() === '') {
+                e.preventDefault();
+                usernameError.innerText = 'Please enter a username';
+            }
+        });
+
+        usernameInput.addEventListener('input', () => {
+            if (usernameInput.value.trim() !== '') {
+                usernameError.innerText = '';
+            }
+        });
+    </script>
+</body>
+</html>
+

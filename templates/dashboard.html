@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dashboard</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+{% block addcss %}{% endblock %}
+<style>
+  body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+header {
+	background-color: #333;
+	color: #fff;
+	padding: 1em;
+	text-align: center;
+}
+
+header nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+header nav ul li {
+	display: inline-block;
+	margin-right: 20px;
+}
+
+header nav a {
+	color: #fff;
+	text-decoration: none;
+}
+
+header nav a:hover {
+	color: #ccc;
+}
+
+.search-bar {
+	display: inline-block;
+	margin-left: 20px;
+}
+
+.search-bar form {
+	display: flex;
+	align-items: center;
+}
+
+.search-bar input[type="search"] {
+	width: 200px;
+	height: 30px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+.search-bar button[type="submit"] {
+	height: 30px;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	background-color: #333;
+	color: #fff;
+	cursor: pointer;
+}
+
+.search-bar button[type="submit"]:hover {
+	background-color: #555;
+}
+
+.dropdown {
+	position: relative;
+}
+
+.dropdown-toggle {
+	cursor: pointer;
+}
+
+.dropdown-menu {
+	background-color: #333;
+	color: #fff;
+	display: none;
+	padding: 10px;
+	position: absolute;
+	top: 100%;
+	left: 0;
+}
+
+.dropdown-menu li {
+	display: block;
+	margin-bottom: 10px;
+}
+
+.dropdown-menu a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+	color: #ccc;
+}
+
+.dropdown:hover .dropdown-menu {
+	display: block;
+}
+
+main {
+	display: block;
+	padding: 2em;
+}
+
+
+        body{
+            background-image:url(https://www.printabulls.com/wp-content/uploads/2022/07/Printable-Note-Pages-6-scaled.jpg);
+        }
+        #add-note-form {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width:25%;
+        margin:5%;
+
+      }
+
+     #add-note-form h2 {
+        margin-top: 0;
+      }
+
+     #add-note-form label {
+       display: block;
+        margin-bottom: 10px;
+     }
+
+      #add-note-form input[type="text"], #add-note-form textarea {
+       width: 100%;
+       padding: 4px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+     }
+
+     #add-note-form textarea {
+      height: 50px;
+     }
+
+      #add-note-form input[type="submit"] {
+      background-color: #17dc56;
+       color: #fff;
+       padding: 10px 80px;
+       border: none;
+       border-radius: 5px;
+       cursor: pointer;
+       margin:-8%;
+     }
+
+      #add-note-form input[type="submit"]:hover {
+     background-color: #2911dd;
+     }
+</style>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<body>
+<header>
+  <nav>
+    <ul>
+      <li><a href="#" id="Home">Home</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle">Notes</a>
+        <ul class="dropdown-menu">
+          <li><a href="{{url_for('addnotes')}}">Add Notes</a></li>
+          <li><a href="{{url_for('viewallnotes')}}">View All Notes</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle">Excel Data</a>
+        <ul class="dropdown-menu">
+          <li>
+            <label for="excel-upload">Excel Data Upload</label>
+            <input type="file" id="excel-upload"  style="display: none;"> 
+			<!-- accept=".xlsx, .xls, .csv" -->
+          </li>
+          <li><a href="{{url_for('getexceldata')}}">View Excel Data</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle">Files</a>
+        <ul class="dropdown-menu">
+          <li>
+            <a href="{{url_for('uploadfile')}}" >File Upload</a>
+            <!-- <input  type="file" id="file-upload" style="display: none;"> -->
+          </li>
+          <li><a href="{{url_for('viewallfiles')}}">View All Files</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" class="search-bar">
+			{{session.get('user')}}
+          <form method="POST" action="{{url_for('search')}}">
+            <input type="search" name="searcheddata" placeholder="Search...">
+            <button type="submit">Search</button>
+          </form>
+        </a>
+      </li>
+      <li><a href="{{url_for('logout')}}" id="logout">Logout</a></li>
+    </ul>
+  </nav>
+</header>
+</body>
+
+{%block content %}{% endblock %}
+{% if sdata %}
+<table border="1">
+  <thead>
+    <tr>
+      <th>notes_id</th>
+      <th>title</th>
+      <th>created time</th>
+      <th> link</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in sdata %}
+    <tr>
+      <td> {{i[0]}}</td>
+      <td> {{i[1]}}</td>
+      <td> {{i[2]}}</td>
+      <td><a href="{{url_for('readnotes',nid=i[0])}}">view</a></td>
+      <td><a href="{{url_for('updatenotes',nid=i[0])}}">update</a></td>
+      <td><a href="{{url_for('delete',nid=i[0])}}">delete</a></td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+</html>
+
+

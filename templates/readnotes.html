@@ -1,0 +1,17 @@
+{% extends 'dashboard.html' %}
+        <title>Add NOtes</title>
+{ % block addcss %}
+
+    {% block content %}
+    <form id="add-note-form" method="POST">
+        <h2>{{notesdata[3]}}</h2>
+    <div class="container">
+        <label for="fortitle">title</label>
+        <input type="text" placeholder="" name="title" id="titleField" value="{{notesdata[1]}}" readonly><br>
+         
+        <label for="contentField">contentField</label>
+        <textarea type="text" placeholder="" class="content-field" name="content" id="contentField"  readonly>{{notesdata[2]}}</textarea>
+        <input type="button" value="submit">
+    </div>
+</form>
+    {% endblock %}
